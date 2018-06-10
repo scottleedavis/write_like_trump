@@ -1,7 +1,6 @@
 
 const lstm = new ml5.LSTMGenerator('trump', modelReady);
 
-
 let textInput;
 let tempSlider;
 let lengthSlider;
@@ -35,16 +34,33 @@ function generate() {
     let data = {
       seed: txt,
       temperature: 0.5, 
-      length: txt.length * 1.5 > 100 ? txt.length * 1.5 : 100
+      length: txt.length * 1.5 > 150 ? txt.length * 1.5 : 150
     };
 
     lstm.generate(data, gotData);
 
     function gotData(result) {
       select('#status').html('Ready!');
-      select('#result').html(result.generated);
+      select('#result').html(merge(txt,result.generated));
+      // select('#result').html(result.generated);
     }
   }
+}
+
+function merge (str1, str2) {
+
+  const a = str1.split(" ").filter(Boolean);
+  const b = str2.split(" ");
+  let mergedString = '';
+
+  for(let i = 0; i < a.length || i < b.length; i++) {  //loop condition checks if i is less than a.length or b.length
+   if(i < a.length)  //if i is less than a.length add a[i] to string first.
+     mergedString +=  a[i] + ' ';
+   if(i < b.length)  //if i is less than b.length add b[i] to string.
+     mergedString +=  b[i] + ' ';
+  }
+  return mergedString;
+
 }
 
 function onEnterPressed() {
